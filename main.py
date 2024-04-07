@@ -1,6 +1,7 @@
 import arcade
 import pyglet
 import ball
+import glob
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -18,7 +19,7 @@ class newGame(arcade.Window):
 
         self.physics_engine = None
 
-        arcade.set_background_color((0, 0, 0))
+        arcade.set_background_color((80, 160, 255))
 
     def setup(self):
         # set up game variables here
@@ -31,7 +32,26 @@ class newGame(arcade.Window):
 
         self.player = ball.Ball(40, 160, "assets/ball/ball1.png", (0.0, 0.0))
 
-        self.scene.add_sprite("Player", self.player.current_sprite)
+        self.delta = pyglet.math.Vec2(0.0, 0.0)
+
+        # self.ball_sprites = glob.glob('assets/ball/*.png', recursive=True)
+        # for sprite in self.ball_sprites:
+       
+        # self.scene.add_sprite("Player", self.player.current_sprite)
+
+        """
+        TODO:
+        1. Create calculations for tiles to fall along a line at center point of tiles
+            Need a vector, or line??
+        2. Override physics_engine class to create step along, or calculations for slope velocity
+            Learn the math for that
+        """
+
+        for x in range(64, 1088, 128):
+            self.tile = arcade.Sprite(filename="assets/tiles/tile.png")
+            self.tile.center_x = x
+            self.tile.center_y = 64
+            self.scene.add_sprite("Tiles", self.tile)
 
     def on_draw(self):
         # render viewport
@@ -40,6 +60,7 @@ class newGame(arcade.Window):
         self.scene.draw()
     
     def on_key_press(self, key, key_modifiers):
+
         pass
 
     def on_key_release(self, key, key_modifiers):
