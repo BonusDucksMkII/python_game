@@ -2,7 +2,8 @@ import arcade
 import numpy as np
 
 class Stage1():
-    def __init__(self):
+    def __init__(self, magnitude):
+        
         pass
 
     def rotation(delta_line):
@@ -19,4 +20,3 @@ class Stage1():
             (-sin(theta), cos(theta))
         ]
         """
-        B = np.matrix(([], []))
