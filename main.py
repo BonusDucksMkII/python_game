@@ -1,6 +1,5 @@
 import arcade
 import arcade.key
-import arcade.key
 import ball
 import numpy as np
 
