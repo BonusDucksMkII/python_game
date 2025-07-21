@@ -10,6 +10,8 @@ SCREEN_TITLE = 'test'
 TILE_SIZE = 128
 TILE_CENTER = int(TILE_SIZE / 2)
 
+ROTATION_SPEED = 2
+
 class newGame(arcade.Window):
 
     def __init__(self, width, height, title):
