@@ -1,7 +1,7 @@
 import arcade
 import arcade.key
 import ball
-import numpy as np
+import pyglet.math as math
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -19,37 +19,12 @@ class newGame(arcade.Window):
 
         self.scene = None
         self.player_sprite = None
-
+  
         self.player = None
 
         self.physics_engine = None
 
         arcade.set_background_color((80, 160, 255))
-
-    def rotation(self, angle):
-        t, t1, t2 = None, None, None
-        theta = np.radians(angle)
-        rotation = np.array((
-                    (np.cos(theta), -np.sin(theta)), 
-                    (np.sin(theta), np.cos(theta))
-                    ))
-        for i in range(0, len(self.coordinate_list)):
-            # print(self.coordinate_list[i])
-
-            # x' = x * cos(theta) + y * -sin(theta)
-            t = self.coordinate_list[i][0] * rotation[0][0]
-            t1 = self.coordinate_list[i][1] * rotation[0][1]  
-            t2 = t + t1
-            # y' = x * sin(theta) + y * cos(theta)
-            t = self.coordinate_list[i][0] * rotation[1][0]
-            t1 = self.coordinate_list[i][1] * rotation[1][1]
-            t1 += t
-            # x' and y'
-            self.coordinate_list[i][0] = t2
-            self.coordinate_list[i][1] = t1
-
-            # print(self.coordinate_list[i])
-            # print("---------")
 
     def test(self):
         x = 0.0
@@ -76,7 +51,7 @@ class newGame(arcade.Window):
         # Use spatial hash for collision?
         self.scene.add_sprite_list("Tiles", use_spatial_hash=True)
 
-        self.player = ball.Ball(40, TILE_SIZE + 32, "assets/ball/ball1.png", (0.0, 0.0))
+        self.player = ball.Ball("assets/ball/ball1.png", 40, TILE_SIZE + 32)
         self.tile = None
 
         # Number of tiles to draw (will work out to be this multiplied by size of tiles)
@@ -96,20 +71,17 @@ class newGame(arcade.Window):
 
     def on_draw(self):
         # render viewport
+        
         self.clear()
         self.scene.draw()
     
     def on_key_press(self, key, key_modifiers):
         if key == arcade.key.RIGHT:
             # print("hello")
-            self.rotation(-1)
-            self.tile.angle -= 1
-            self.draw_stage()
+            self.player.accel(math.Vec2(0.01, 0))
         if key == arcade.key.LEFT:
             # print("goodbye")
-            self.rotation(1)
-            self.tile.angle += 1
-            self.draw_stage()
+            self.player.accel(math.Vec2(-0.01, 0))
         pass
 
     def on_key_release(self, key, key_modifiers):
