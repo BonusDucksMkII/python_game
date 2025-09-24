@@ -8,7 +8,7 @@ FRICTION = 0.02 #ice
 class physicsObject():
 	def __init__(self, x, y, top_speed):
 		self.position = pyglet.math.Vec2(x, y)
-		self.velocity = pyglet.math.Vec2(0, 0)
+		self._velocity = pyglet.math.Vec2(0, 0)
 		self.top_speed = top_speed
 
 	# already implemented in pyglet.math	
@@ -27,5 +27,11 @@ class physicsObject():
 
 	# magnitude (length) & direction
 	def accel(self, accelRate):
-		if self.velocity.x < self.top_speed | self.velocity.y < self.top_speed : self.velocity + accelRate
-		self.position = self.position + self.velocity
+		if self._velocity.x < self.top_speed : self._velocity += accelRate
+
+def update_objects(phys_list):
+	for obj in phys_list:
+		#obj._velocity -= pyglet.math.Vec2(0, GRAVITY_CONST)
+		obj.position += obj._velocity
+		obj.sprite.center_x = obj.position.x
+		obj.sprite.center_y = obj.position.y

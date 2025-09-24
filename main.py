@@ -1,7 +1,9 @@
 import arcade
 import arcade.key
-import ball
 import pyglet.math as math
+
+import ball
+import physics
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -47,15 +49,17 @@ class newGame(arcade.Window):
         # set up game variables here
         self.scene = arcade.Scene()
 
-        self.scene.add_sprite_list("Player")
+        self.player = ball.Ball("assets/ball/ball1.png", 32, TILE_SIZE + 32, 10)
+
+        self.physicsObjectList = [self.player]
+        
         # Use spatial hash for collision?
         self.scene.add_sprite_list("Tiles", use_spatial_hash=True)
-
-        self.player = ball.Ball("assets/ball/ball1.png", 40, TILE_SIZE + 32)
+        self.scene.add_sprite("player", self.player.sprite)
+        
         self.tile = None
 
         # Number of tiles to draw (will work out to be this multiplied by size of tiles)
-        self.magnitude = 16
 
         # self.scene.add_sprite("Player", self.player.current_sprite)
 
@@ -71,21 +75,25 @@ class newGame(arcade.Window):
 
     def on_draw(self):
         # render viewport
-        
         self.clear()
         self.scene.draw()
+        self.player.sprite.draw()
+
+    def on_update(self, delta_time):
+        physics.update_objects(self.physicsObjectList)
     
     def on_key_press(self, key, key_modifiers):
         if key == arcade.key.RIGHT:
             # print("hello")
-            self.player.accel(math.Vec2(0.01, 0))
+            self.player.accel(math.Vec2(1, 0))
+            
         if key == arcade.key.LEFT:
             # print("goodbye")
-            self.player.accel(math.Vec2(-0.01, 0))
+            self.player.accel(math.Vec2(-1, 0))
         pass
 
     def on_key_release(self, key, key_modifiers):
-        pass
+        self.on_update(0.1)
 
 def main():
     # print(TILE_SIZE)
