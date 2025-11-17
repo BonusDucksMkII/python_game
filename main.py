@@ -1,12 +1,13 @@
 import arcade
 import arcade.key
 import pyglet.math as math
+import pyglet.canvas as canvas
 
 import ball
 import physics
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 1600
+SCREEN_HEIGHT = 900
 SCREEN_TITLE = 'test'
 
 TILE_SIZE = 128
@@ -84,8 +85,10 @@ class newGame(arcade.Window):
         self.player.sprite.draw()
 
     def on_update(self, delta_time):
-        if self.right_press: self.player.accel(math.Vec2(1, 0))
-        if self.left_press: self.player.accel(math.Vec2(-1, 0))
+        arcade.check_for_collision_with_list()
+
+        if self.right_press: self.player.accel(math.Vec2(0.1, 0))
+        if self.left_press: self.player.accel(math.Vec2(-0.1, 0))
 
         physics.update_objects(self.physicsObjectList)
     
@@ -103,6 +106,9 @@ class newGame(arcade.Window):
 
 def main():
     # print(TILE_SIZE)
+    # display = canvas.get_display()
+    # screen = display.get_screen()
+    # screen.width, screen.height
     game = newGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     game.setup()
     arcade.run()
