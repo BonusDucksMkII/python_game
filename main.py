@@ -26,6 +26,10 @@ class newGame(arcade.Window):
 
         self.physics_engine = None
 
+        self.right_press= False
+        self.left_press = False
+
+
         arcade.set_background_color((80, 160, 255))
 
     def test(self):
@@ -49,7 +53,7 @@ class newGame(arcade.Window):
         # set up game variables here
         self.scene = arcade.Scene()
 
-        self.player = ball.Ball("assets/ball/ball1.png", 32, TILE_SIZE + 32, 10)
+        self.player = ball.Ball("assets/ball/ball1.png", 32, TILE_SIZE + 32, 8)
 
         self.physicsObjectList = [self.player]
         
@@ -80,20 +84,22 @@ class newGame(arcade.Window):
         self.player.sprite.draw()
 
     def on_update(self, delta_time):
+        if self.right_press: self.player.accel(math.Vec2(1, 0))
+        if self.left_press: self.player.accel(math.Vec2(-1, 0))
+
         physics.update_objects(self.physicsObjectList)
     
     def on_key_press(self, key, key_modifiers):
         if key == arcade.key.RIGHT:
-            # print("hello")
-            self.player.accel(math.Vec2(1, 0))
-            
+            self.right_press = True
         if key == arcade.key.LEFT:
-            # print("goodbye")
-            self.player.accel(math.Vec2(-1, 0))
-        pass
+            self.left_press = True
 
     def on_key_release(self, key, key_modifiers):
-        self.on_update(0.1)
+        if key == arcade.key.RIGHT:
+            self.right_press = False
+        if key == arcade.key.LEFT:
+            self.left_press = False
 
 def main():
     # print(TILE_SIZE)
