@@ -1,14 +1,13 @@
-import numpy as np
-import pyglet.math
+import pyglet.math as math
 
 GRAVITY_CONST = 9.807
 
 FRICTION = 0.02 #ice
 
 class physicsObject():
-	def __init__(self, x, y, top_speed):
-		self.position = pyglet.math.Vec2(x, y)
-		self._velocity = pyglet.math.Vec2(0, 0)
+	def __init__(self, position: math.Vec2, top_speed):
+		self.position = position
+		self._velocity = math.Vec2(0, 0)
 		self.top_speed = top_speed
 
 	# already implemented in pyglet.math	
@@ -28,6 +27,12 @@ class physicsObject():
 	# magnitude (length) & direction
 	def accel(self, accelRate):
 		if self._velocity.x < self.top_speed : self._velocity += accelRate
+
+	def set_velocity(self, vel: math.Vec2):
+		self._velocity = vel
+	
+	def get_velocity(self):
+		return self._velocity.x
 
 def update_objects(phys_list):
 	for obj in phys_list:

@@ -42,7 +42,7 @@ class newGame(arcade.Window):
             x += 128.0
 
     def draw_stage(self):
-        for co in self.coordinate_list:
+        for co in self.coordinate_list: 
             self.tile = arcade.Sprite(filename="assets/tiles/tile.png")
             # Forward half a tile
             self.tile.center_x = co[0] + TILE_CENTER
@@ -54,19 +54,28 @@ class newGame(arcade.Window):
         # set up game variables here
         self.scene = arcade.Scene()
 
-        self.player = ball.Ball("assets/ball/ball1.png", 32, TILE_SIZE + 32, 8)
+        self.player = ball.Ball("assets/ball/ball1.png", math.Vec2(32, TILE_SIZE + 32), 8)
 
         self.physicsObjectList = [self.player]
         
         # Use spatial hash for collision?
-        self.scene.add_sprite_list("Tiles", use_spatial_hash=True)
-        self.scene.add_sprite("player", self.player.sprite)
-        
-        self.tile = None
+        self.stage = arcade.SpriteList(use_spatial_hash=True)
 
-        # Number of tiles to draw (will work out to be this multiplied by size of tiles)
+        self.scene.add_sprite_list("Tiles", self.stage)
+        self.player_sprite = self.scene.add_sprite("player", self.player.sprite)
 
-        # self.scene.add_sprite("Player", self.player.current_sprite)
+        print(arcade.load_font(".\assets\fonts\Arcadepix_Plus.ttf"))
+        self.debug = arcade.Text(
+            text="yay",
+            start_x=2, start_y=18,
+            color=arcade.color.BLACK,
+            font_size=16,
+            width=0,
+            align="left",
+            font_name="assets/fonts/Arcadeppix_Plus.ttf",
+            anchor_x="left",
+            anchor_y="top"
+        )
 
         """
         TODO:
@@ -85,7 +94,11 @@ class newGame(arcade.Window):
         self.player.sprite.draw()
 
     def on_update(self, delta_time):
-        arcade.check_for_collision_with_list()
+        self.collided = arcade.check_for_collision_with_list(self.player.sprite, self.stage)
+        for sprite in self.collided:
+            print(sprite.center_x)
+            # if self.player.sprite in sprite:
+            #     print("Yes")
 
         if self.right_press: self.player.accel(math.Vec2(0.1, 0))
         if self.left_press: self.player.accel(math.Vec2(-0.1, 0))
@@ -97,6 +110,9 @@ class newGame(arcade.Window):
             self.right_press = True
         if key == arcade.key.LEFT:
             self.left_press = True
+        if key == arcade.key.R:
+            self.player.position = math.Vec2(32, TILE_SIZE + 32)
+            self.player.set_velocity(math.Vec2(0, 0))
 
     def on_key_release(self, key, key_modifiers):
         if key == arcade.key.RIGHT:

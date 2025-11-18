@@ -4,6 +4,12 @@ import numpy as np
 class Stage1():
     def __init__(self, magnitude):
         
+        """
+        Wishlist:
+        Starting point
+        Tilemap reference
+        Stage construction
+        """
         pass
 
     def rotation(delta_line):
