@@ -1,20 +1,21 @@
 import pyglet.math as math
 
-GRAVITY_CONST = 9.807
+GRAVITY_CONST = 6
 
-FRICTION = 0.02 #ice
+FRICTION = 0.01
 
 class physicsObject():
 	def __init__(self, position: math.Vec2, top_speed):
 		self.position = position
 		self._velocity = math.Vec2(0, 0)
 		self.top_speed = top_speed
+		self.colliding = False
 
 	# already implemented in pyglet.math	
 	# def rotate(coord, target_angle):
 	# 	theta = np.radians(target_angle)
 	# 	rotation = np.array((
-	# 				(np.cos(theta), -np.sin(theta)), 
+	# 				(np.cos(theta), -np.sin(theta)),
 	# 				(np.sin(theta), np.cos(theta))
 	# 				))
 	# 	# x' = x * cos(theta) + y * -sin(theta)
@@ -36,7 +37,10 @@ class physicsObject():
 
 def update_objects(phys_list):
 	for obj in phys_list:
-		#obj._velocity -= pyglet.math.Vec2(0, GRAVITY_CONST)
+		# obj._velocity -= math.Vec2(0, GRAVITY_CONST)
 		obj.position += obj._velocity
 		obj.sprite.center_x = obj.position.x
 		obj.sprite.center_y = obj.position.y
+		# friction
+		if obj._velocity.x != 0.0:
+			obj._velocity -= math.Vec2(FRICTION, 0)

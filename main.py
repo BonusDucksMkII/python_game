@@ -2,12 +2,13 @@ import arcade
 import arcade.key
 import pyglet.math as math
 import pyglet.canvas as canvas
+import pyglet.font as font
 
 import ball
 import physics
 
-SCREEN_WIDTH = 1600
-SCREEN_HEIGHT = 900
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 800
 SCREEN_TITLE = 'test'
 
 TILE_SIZE = 128
@@ -59,23 +60,35 @@ class newGame(arcade.Window):
         self.physicsObjectList = [self.player]
         
         # Use spatial hash for collision?
-        self.stage = arcade.SpriteList(use_spatial_hash=True)
+        self.stage = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=TILE_SIZE)
 
         self.scene.add_sprite_list("Tiles", self.stage)
-        self.player_sprite = self.scene.add_sprite("player", self.player.sprite)
 
-        print(arcade.load_font(".\assets\fonts\Arcadepix_Plus.ttf"))
-        self.debug = arcade.Text(
-            text="yay",
-            start_x=2, start_y=18,
-            color=arcade.color.BLACK,
-            font_size=16,
-            width=0,
-            align="left",
-            font_name="assets/fonts/Arcadeppix_Plus.ttf",
-            anchor_x="left",
-            anchor_y="top"
-        )
+        arcade.load_font("assets/fonts/Arcadepix_Plus.ttf")
+        try:
+            self.debug = arcade.Text(
+                text="",
+                start_x=10, start_y=784,
+                color=arcade.color.WHITE,
+                font_size=16,
+                width=0,
+                align="left",
+                font_name="Arcadepix_Plus.ttf",
+                anchor_x="left",
+                anchor_y="top"
+            )
+        except:
+            self.debug = arcade.Text(
+                text="",
+                start_x=-640, start_y=400,
+                color=arcade.color.WHITE,
+                font_size=16,
+                width=0,
+                align="left",
+                font_name="arial.ttf",
+                anchor_x="left",
+                anchor_y="top"
+            )
 
         """
         TODO:
@@ -92,18 +105,18 @@ class newGame(arcade.Window):
         self.clear()
         self.scene.draw()
         self.player.sprite.draw()
+        self.debug.draw()
 
     def on_update(self, delta_time):
-        self.collided = arcade.check_for_collision_with_list(self.player.sprite, self.stage)
-        for sprite in self.collided:
-            print(sprite.center_x)
-            # if self.player.sprite in sprite:
-            #     print("Yes")
+        self.collided = arcade.check_for_collision_with_list(self.player.sprite, self.stage, 1)
+        if self.player.sprite in self.collided:
+            print("true")
 
         if self.right_press: self.player.accel(math.Vec2(0.1, 0))
         if self.left_press: self.player.accel(math.Vec2(-0.1, 0))
 
         physics.update_objects(self.physicsObjectList)
+        self.debug.text = f'{self.player._velocity.x:.2f}'
     
     def on_key_press(self, key, key_modifiers):
         if key == arcade.key.RIGHT:

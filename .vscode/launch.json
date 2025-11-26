@@ -1,6 +1,5 @@
 {
     "configurations": [
-
         {
             "name": "Python Debugger: main",
             "type": "debugpy",
