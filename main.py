@@ -30,8 +30,8 @@ class newGame(arcade.Window):
 
         self.right_press= False
         self.left_press = False
-
-
+        
+        arcade.camera
         arcade.set_background_color((80, 160, 255))
 
     def test(self):
@@ -64,8 +64,9 @@ class newGame(arcade.Window):
 
         self.scene.add_sprite_list("Tiles", self.stage)
 
-        arcade.load_font("assets/fonts/Arcadepix_Plus.ttf")
+
         try:
+            arcade.load_font("assets/Arcadepix_Plus.ttf")
             self.debug = arcade.Text(
                 text="",
                 start_x=10, start_y=784,

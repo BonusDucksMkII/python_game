@@ -1,8 +1,8 @@
 import pyglet.math as math
 
-GRAVITY_CONST = 6
+GRAVITY_CONST = 1
 
-FRICTION = 0.01
+FRICTION = 0.02
 
 class physicsObject():
 	def __init__(self, position: math.Vec2, top_speed):
@@ -37,10 +37,14 @@ class physicsObject():
 
 def update_objects(phys_list):
 	for obj in phys_list:
-		# obj._velocity -= math.Vec2(0, GRAVITY_CONST)
+		#obj._velocity -= math.Vec2(0, GRAVITY_CONST)
 		obj.position += obj._velocity
 		obj.sprite.center_x = obj.position.x
 		obj.sprite.center_y = obj.position.y
 		# friction
-		if obj._velocity.x != 0.0:
+		if obj._velocity.x > 0.0:
 			obj._velocity -= math.Vec2(FRICTION, 0)
+		elif obj._velocity.x < 0.0:
+			obj._velocity += math.Vec2(FRICTION, 0)
+
+def collision_object(sprite1, sprite2):
