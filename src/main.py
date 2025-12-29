@@ -30,6 +30,8 @@ class newGame(arcade.Window):
 
         self.right_press= False
         self.left_press = False
+        self.up_press = False
+        self.down_press = False
         
         arcade.camera
         arcade.set_background_color((80, 160, 255))
@@ -79,6 +81,7 @@ class newGame(arcade.Window):
                 anchor_y="top"
             )
         except:
+            print("font missing")
             self.debug = arcade.Text(
                 text="",
                 start_x=-640, start_y=400,
@@ -115,6 +118,8 @@ class newGame(arcade.Window):
 
         if self.right_press: self.player.accel(math.Vec2(0.1, 0))
         if self.left_press: self.player.accel(math.Vec2(-0.1, 0))
+        if self.up_press: self.player.position += math.Vec2(0, 1)
+        if self.down_press: self.player.position -= math.Vec2(0, 1)
 
         physics.update_objects(self.physicsObjectList)
         self.debug.text = f'{self.player._velocity.x:.2f}'
@@ -127,12 +132,20 @@ class newGame(arcade.Window):
         if key == arcade.key.R:
             self.player.position = math.Vec2(32, TILE_SIZE + 32)
             self.player.set_velocity(math.Vec2(0, 0))
+        if key == arcade.key.UP:
+            self.up_press = True
+        if key == arcade.key.DOWN:
+            self.down_press = True
 
     def on_key_release(self, key, key_modifiers):
         if key == arcade.key.RIGHT:
             self.right_press = False
         if key == arcade.key.LEFT:
             self.left_press = False
+        if key == arcade.key.UP:
+            self.up_press = False
+        if key == arcade.key.DOWN:
+            self.down_press = False
 
 def main():
     # print(TILE_SIZE)
