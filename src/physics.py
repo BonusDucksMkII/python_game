@@ -47,8 +47,5 @@ def update_objects(phys_list):
 		elif obj._velocity.x < 0.0:
 			obj._velocity += math.Vec2(FRICTION, 0)
 
-def collision_object(sprite1, sprite2):
-	if sprite1.x > sprite2.x:
-		return True
-	if sprite1.y > sprite2.y:
-		return True
+def sdf_to_block(sprite1, sprite2):
+	return sprite1.sdf > sprite2.hit_box[0] or sprite1.sdf > sprite2.hit_box[2]
